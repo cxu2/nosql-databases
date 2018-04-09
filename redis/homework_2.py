@@ -41,14 +41,5 @@ article_switch_vote(redis, "user:2", "article:8", "article:1")
 # PRINT THE ARTICLE'S LINK TO STDOUT:
 # HOMEWORK 2 Part II
 article = redis.zrangebyscore(name="score:", min="10", max="20")
-print redis.hgetall("article:1")
-print redis.hgetall("article:2")
-print redis.hgetall("article:3")
-print redis.hgetall("article:4")
-print redis.hgetall("article:5")
-print redis.hgetall("article:6")
-print redis.hgetall("article:7")
-print redis.hgetall("article:8")
-print redis.hgetall("article:9")
 print redis.hget(name=article[0], key="link")
 
