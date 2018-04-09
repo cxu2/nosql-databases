@@ -14,9 +14,20 @@ def article_vote(redis, user, article):
             redis.zincrby(name='score:', value=article, amount=VOTE_SCORE)
             redis.hincrby(name=article, key='votes', amount=1)
 
+def article_down_vote(redis, user, article):
+    cutoff = datetime.datetime.now() - datetime.timedelta(seconds=ONE_WEEK_IN_SECONDS)
+
+    if not datetime.datetime.fromtimestamp(redis.zscore('time:', article)) < cutoff:
+        article_id = article.split(':')[-1]
+        if redis.srem('voted:' + article_id, user):
+            redis.zincrby(name='score:', value=article, amount=-VOTE_SCORE)
+            redis.hincrby(name=article, key='votes', amount=-1)
+
+
 def article_switch_vote(redis, user, from_article, to_article):
     # HOMEWORK 2 Part I
-    pass
+    article_vote(redis, user, to_article)
+    article_down_vote(redis, user, from_article)
 
 redis = redis.StrictRedis(host='localhost', port=6379, db=0)
 # user:3 up votes article:1
@@ -29,6 +40,15 @@ article_switch_vote(redis, "user:2", "article:8", "article:1")
 # Which article's score is between 10 and 20?
 # PRINT THE ARTICLE'S LINK TO STDOUT:
 # HOMEWORK 2 Part II
-# article = redis.?
-# print redis.?
+article = redis.zrangebyscore(name="score:", min="10", max="20")
+print redis.hgetall("article:1")
+print redis.hgetall("article:2")
+print redis.hgetall("article:3")
+print redis.hgetall("article:4")
+print redis.hgetall("article:5")
+print redis.hgetall("article:6")
+print redis.hgetall("article:7")
+print redis.hgetall("article:8")
+print redis.hgetall("article:9")
+print redis.hget(name=article[0], key="link")
 
