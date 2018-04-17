@@ -42,6 +42,7 @@ for document in cursor1:
     pprint(document)
 
 # Part D
+# I am just using "countries" : "China" here instead of ["China"] to match any movie that has "China" in countries
 cursor2 = db.movies.aggregate(
     [
         { "$match" : { "countries" : "China", "rated" : "Pending rating" } },
@@ -54,14 +55,14 @@ for document in cursor2:
 
 # Part E
 db.teams.insert([
-    { "_id" : 1, "name" : "Houston Rockets", "wins" : 65, "loses" : 17 },
-    { "_id" : 2, "name" : "Toronto Raptors", "wins" : 59, "loses" : 23 }
+    { "name" : "Houston Rockets", "wins" : 65, "loses" : 17 },
+    { "name" : "Toronto Raptors", "wins" : 59, "loses" : 23 }
 ])
 
 db.allstars.insert([
-    { "_id" : 1, "names" : ["Stephen Curry", "Kevin Durant", "Klay Thompson", "Draymond Green"], "team" : "Golden State Warriors" },
-    { "_id" : 2, "names" : ["Demar DeRozan", "Kyle Lowry"], "team" : "Toronto Raptors" },
-    { "_id" : 3, "names" : ["James Harden"], "team" : "Houston Rockets" }
+    { "names" : ["Stephen Curry", "Kevin Durant", "Klay Thompson", "Draymond Green"], "team" : "Golden State Warriors" },
+    { "names" : ["Demar DeRozan", "Kyle Lowry"], "team" : "Toronto Raptors" },
+    { "names" : ["James Harden"], "team" : "Houston Rockets" }
 ])
 
 cursor3 = db.teams.aggregate([
