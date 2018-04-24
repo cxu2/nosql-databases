@@ -1,7 +1,43 @@
-// The scenario you have used for your schema is:
+// The scenario you have used for your schema is: 
+// Star wars, nodes including Darth Vader, Darth Sidious, Darth Tyranus, Qui-Gon Jinn, Obi Wan, Yoda, Luke SkyWalker and Leia Organa
 
 
 // This is an example. Your own commands should *not* be commented out so we can pipe the file into the cypher-shell.
 // If you'd like to test your commands, you can run 'cat homework_4.txt | cypher-shell -u neo4j -p test' from
 // the vagrant box command line. Make sure neo4j is running first.
 // CREATE (a:person { name: 't' });
+
+create (a:Sith {name: 'Darth Vader', was: 'Anakin Skywalker'});
+create (a:Sith {name: 'Darth Sidious'});
+create (a:Sith {name: 'Darth Tyranus', was: 'Count Dooku'});
+create (a:Jedi {name: 'Qui-Gon Jinn'});
+create (a:Jedi {name: 'Obi Wan'});
+create (a:Jedi {name: 'Yoda'});
+create (a:Jedi {name: 'Luke Skywalker'});
+create (a:Jedi {name: 'Leia Organa'});
+match (a:Jedi {name: 'Qui-Gon Jinn'}), (b:Jedi {name: 'Obi Wan'})
+create (a)-[r1: trainer_of]->(b), (b)-[r2: apprentice_of]->(a);
+match (a:Sith {name: 'Darth Tyranus'}), (b:Jedi {name: 'Qui-Gon Jinn'})
+create (a)-[r1: trainer_of]->(b), (b)-[r2: apprentice_of]->(a);
+match (a:Jedi {name: 'Yoda'}), (b:Sith {name: 'Darth Tyranus'})
+create (a)-[r1: trainer_of]->(b), (b)-[r2: apprentice_of]->(a);
+match (a:Jedi {name: 'Yoda'}), (b:Jedi {name: 'Luke Skywalker'})
+create (a)-[r1: trainer_of]->(b), (b)-[r2: apprentice_of]->(a);
+match (a:Sith {name: 'Darth Sidious'}), (b:Sith {name: 'Darth Vader'})
+create (a)-[r1: trainer_of]->(b), (b)-[r2: apprentice_of]->(a);
+match (a:Sith {name: 'Darth Sidious'}), (b:Sith {name: 'Darth Tyranus'})
+create (a)-[r1: trainer_of]->(b), (b)-[r2: apprentice_of]->(a);
+match (a:Jedi {name: 'Obi Wan'}), (b:Jedi {name: 'Luke Skywalker'})
+create (a)-[r1: trainer_of]->(b), (b)-[r2: apprentice_of]->(a);
+match (a:Jedi {name: 'Obi Wan'}), (b:Sith {name: 'Darth Vader'})
+create (a)-[r1: trainer_of]->(b), (b)-[r2: apprentice_of]->(a);
+match (a:Sith {name: 'Darth Vader'}), (b:Jedi {name: 'Luke Skywalker'})
+create (a)-[r1: father_of]->(b), (b)-[r2: son_of]->(a);
+match (a:Sith {name: 'Darth Vader'}), (b:Jedi {name: 'Leia Organa'})
+create (a)-[r1: father_of]->(b), (b)-[r2: daughter_of]->(a);
+match (a:Jedi {name: 'Luke Skywalker'}), (b:Jedi {name: 'Leia Organa'})
+create (a)-[r1: brother_of]->(b), (b)-[r2: sister_of]->(a);
+match (:Sith {name: 'Darth Tyranus'})-[r]->(b)
+return type(r), b.name;
+match (:Sith {name: 'Darth Vader'})<-[r]-(b:Jedi)
+return type(r), b.name;
